@@ -217,6 +217,21 @@ a.postcard:hover { transform: rotate(0deg) scale(1.02); }
 .pager a span { font-family: var(--f-display); font-size: 20px; }
 .pager a.next { text-align: right; margin-left: auto; }
 
+/* ---------- day-by-day timeline ---------- */
+.days { display: grid; gap: 30px; padding-block: 20px 36px; }
+.dayrow { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 20px; align-items: start; }
+.daylabel { display: grid; justify-items: start; padding-top: 6px; border-top: 3px solid var(--seal); }
+.daylabel .dow { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: var(--seal); margin-top: 6px; }
+.daylabel .date { font-family: var(--f-display); font-size: 24px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.daycards, .stops-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 26px 22px; }
+.stops-grid { padding-block: 12px 36px; }
+.daycards > *, .stops-grid > * { margin: 0; }
+@media (max-width: 560px) {
+  .dayrow { grid-template-columns: 1fr; gap: 10px; }
+  .daylabel { grid-auto-flow: column; gap: 10px; align-items: baseline; }
+  .daycards > *, .stops-grid > * { transform: none; }
+}
+
 /* ---------- guided tours (brochure cards) ---------- */
 .tours-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; margin-top: 4px; }
 .tours-head h2, .alt-city h2 { font-family: var(--f-display); font-weight: 400; font-size: 28px; margin: 0; }
@@ -643,8 +658,19 @@ const sticky = (text, label, i) => `<div class="sticky ${tilt(i)}"><small>${esc(
 function load(key) { try { return JSON.parse(localStorage.getItem(key) || "[]"); } catch { return []; } }
 function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
 
+/* Sort spots by date, then by time of day ("early" before "morning" before "evening"...). */
+const PARTS = [["early", 0], ["7:30", 0], ["late morning", 2], ["morning", 1], ["afternoon", 3], ["dusk", 4], ["evening", 5], ["night", 6]];
+function dayKey(label) {
+  const m = label.match(/(May|Jun)\s+(\d+)/);
+  const date = m ? (m[1] === "Jun" ? 31 : 0) + +m[2] : 99;
+  const part = (label.split("·")[1] || "").toLowerCase();
+  const hit = PARTS.find(([w]) => part.includes(w));
+  return date * 10 + (hit ? hit[1] : 1.5);
+}
+const sortedSpots = c => [...c.see].sort((a, b) => dayKey(a.day) - dayKey(b.day));
+
 function checklist(c) {
-  const items = [...c.see.map(s => s.title), ...c.eat.map(f => "Eat " + f.title.charAt(0).toLowerCase() + f.title.slice(1))];
+  const items = [...sortedSpots(c).map(s => s.title), ...c.eat.map(f => "Eat " + f.title.charAt(0).toLowerCase() + f.title.slice(1))];
   const done = load("done-" + c.id);
   return `<div class="checklist tilt-c" data-city="${c.id}">
     <h3>${esc(shortName(c))} bucket list</h3>
@@ -656,12 +682,23 @@ function checklist(c) {
 function cityPage(c) {
   const idx = CITIES.indexOf(c);
   const prev = CITIES[idx - 1], next = CITIES[idx + 1];
-  const [hero, ...rest] = c.see;
-  const tiles = rest.map((s, i) => postcardSpot(c, s, i));
-  c.eat.forEach((f, i) => tiles.splice(1 + i * 2, 0, ticket(f, i)));
-  tiles.splice(2, 0, sticky(c.builtFor, "Built for", 1));
-  tiles.splice(4, 0, `<div class="phrase tilt-b"><div class="lbl">Phrase to learn</div><div class="zh">${c.phrase.zh}</div><div class="py">${c.phrase.py}</div><div class="en">${esc(c.phrase.en)}</div></div>`);
-  tiles.splice(6, 0, sticky(c.note, "Note to us", 3));
+  const groups = [];
+  sortedSpots(c).forEach(s => {
+    const date = s.day.split("·")[0].trim();
+    let g = groups.find(x => x.date === date);
+    if (!g) groups.push(g = { date, items: [] });
+    g.items.push(s);
+  });
+  let n = 0;
+  const days = groups.map(g => {
+    const [dow, ...rest] = g.date.split(" ");
+    return `<div class="dayrow"><div class="daylabel"><span class="dow">${esc(dow)}</span><span class="date">${esc(rest.join(" "))}</span></div>
+      <div class="daycards">${g.items.map(s => postcardSpot(c, s, n++)).join("")}</div></div>`;
+  }).join("");
+  const tiles = c.eat.map((f, i) => ticket(f, i));
+  tiles.splice(0, 0, sticky(c.builtFor, "Built for", 1));
+  tiles.splice(2, 0, `<div class="phrase tilt-b"><div class="lbl">Phrase to learn</div><div class="zh">${c.phrase.zh}</div><div class="py">${c.phrase.py}</div><div class="en">${esc(c.phrase.en)}</div></div>`);
+  tiles.splice(4, 0, sticky(c.note, "Note to us", 3));
   tiles.push(`<div class="swatches taped tilt-a"><div class="row">${c.palette.map(p => `<span style="background:${p}"></span>`).join("")}</div><div class="lbl">The colors of ${esc(shortName(c))}</div></div>`);
   tiles.push(checklist(c));
   tiles.push(`<div class="stamp"><span class="seal">${c.zh}</span><p>Stop ${idx + 1} of ${CITIES.length}</p></div>`);
@@ -676,10 +713,12 @@ function cityPage(c) {
       <div class="facts"><span><b>${esc(c.dates)}</b></span><span>${c.nights} nights</span><span>${esc(c.arrive)}</span></div>
     </div>
     <figure class="postcard taped" style="margin:0">
-      <div class="scene big">${scene(c.id + hero.title, hero.sky, c.hill, hero.style || c.style, hero.water)}<span class="glyph">${hero.zh}</span></div>
-      <figcaption>${spotBody(hero)}</figcaption>
+      <div class="scene big">${scene(c.id + "-cover", c.sky, c.hill, c.style, c.water)}</div>
+      <figcaption><div class="day">Stop ${idx + 1} · ${esc(c.dates)}</div><div class="cap">${esc(c.tag)}</div></figcaption>
     </figure>
   </section>
+  <div class="section-label eyebrow">Day by day</div>
+  <section class="days">${days}</section>
   <div class="section-label eyebrow">The board</div>
   <section class="board">${tiles.join("")}</section>
   <div class="section-label eyebrow">Popular guided tours</div>
@@ -692,14 +731,9 @@ function cityPage(c) {
 }
 
 function homePage() {
-  const tiles = CITIES.map(postcardCity);
-  tiles.splice(1, 0, sticky(WISHES[0], "Trip goal", 1));
-  tiles.splice(4, 0, sticky(WISHES[1], "Trip goal", 3));
-  tiles.splice(6, 0, `<div class="phrase tilt-a"><div class="lbl">First word to learn</div><div class="zh">你好</div><div class="py">nǐ hǎo</div><div class="en">Hello</div></div>`);
-  tiles.splice(9, 0, sticky(WISHES[2], "Trip goal", 2));
-  tiles.push(sticky(WISHES[3], "Trip goal", 0));
-  tiles.push(`<div class="stamp"><span class="seal">中国</span><p>Eight stops. No flights in between.</p></div>`);
-  tiles.push(sticky(WISHES[4], "Trip goal", 1));
+  const tiles = WISHES.map((w, i) => sticky(w, "Trip goal", i));
+  tiles.splice(2, 0, `<div class="phrase tilt-a"><div class="lbl">First word to learn</div><div class="zh">你好</div><div class="py">nǐ hǎo</div><div class="en">Hello</div></div>`);
+  tiles.splice(4, 0, `<div class="stamp"><span class="seal">中国</span><p>Eight stops. No flights in between.</p></div>`);
   return `
   <section class="hero">
     <div class="brush" lang="zh">中国</div>
@@ -713,6 +747,9 @@ function homePage() {
   <div class="route" aria-label="Route">
     <ol>${CITIES.map((c, i) => `<li><a href="#${c.id}"><span class="num">${i + 1}</span><span class="nm">${esc(shortName(c))}</span><span class="dt">${esc(c.dates)}</span></a></li>`).join("")}</ol>
   </div>
+  <div class="section-label eyebrow">The stops, in order</div>
+  <section class="stops-grid">${CITIES.map(postcardCity).join("")}</section>
+  <div class="section-label eyebrow">Trip goals</div>
   <section class="board">${tiles.join("")}</section>`;
 }
 
