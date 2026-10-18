@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Our China Board</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&family=Young+Serif&family=Albert+Sans:wght@400;500;700&family=Kalam:wght@400;700&display=swap">
+<style>
+/* Layout: a jade pinboard. Taped postcards, sticky notes and food tickets in a loose masonry; each stop gets its own board, reached from the route strip. */
+:root {
+  --board: #dce6df;
+  --board-dot: rgba(30, 52, 42, .10);
+  --paper: #fbfaf5;
+  --ink: #1c2622;
+  --muted: #56655e;
+  --seal: #c23a22;
+  --seal-ink: #fff6ee;
+  --gold: #a87a1c;
+  --note: #f4e47e;
+  --note-ink: #3a3214;
+  --tape: rgba(232, 214, 160, .78);
+  --line: rgba(28, 38, 34, .14);
+  --shadow: 0 1px 2px rgba(20, 34, 28, .14), 0 10px 22px -10px rgba(20, 34, 28, .38);
+  --f-brush: "Zhi Mang Xing", "STKaiti", "KaiTi", "Kaiti SC", serif;
+  --f-display: "Young Serif", Georgia, "Times New Roman", serif;
+  --f-body: "Albert Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-hand: "Kalam", "Segoe Print", "Bradley Hand", cursive;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --board: #101814; --board-dot: rgba(200, 230, 214, .07); --paper: #1c2622; --ink: #e6ede9; --muted: #9caba4;
+    --seal: #e2563b; --seal-ink: #1a0f0c; --gold: #d9ad4c; --note: #57501f; --note-ink: #f7efbf;
+    --tape: rgba(200, 182, 128, .45); --line: rgba(230, 237, 233, .13);
+    --shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 12px 26px -10px rgba(0, 0, 0, .7);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --board: #101814; --board-dot: rgba(200, 230, 214, .07); --paper: #1c2622; --ink: #e6ede9; --muted: #9caba4;
+  --seal: #e2563b; --seal-ink: #1a0f0c; --gold: #d9ad4c; --note: #57501f; --note-ink: #f7efbf;
+  --tape: rgba(200, 182, 128, .45); --line: rgba(230, 237, 233, .13);
+  --shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 12px 26px -10px rgba(0, 0, 0, .7);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background-color: var(--board);
+  background-image: radial-gradient(var(--board-dot) 1px, transparent 1.4px);
+  background-size: 14px 14px;
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 16px;
+  line-height: 1.55;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
+
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* ---------- header ---------- */
+header.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+  background: color-mix(in srgb, var(--board) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+header.top .wrap { display: flex; align-items: center; gap: 10px 16px; padding-block: 10px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-family: var(--f-display); font-size: 18px; }
+.seal {
+  display: inline-grid; place-items: center;
+  background: var(--seal); color: var(--seal-ink);
+  font-family: var(--f-brush); line-height: .9;
+  border-radius: 4px;
+  writing-mode: vertical-rl;
+}
+.brand .seal { width: 34px; height: 34px; font-size: 15px; }
+nav.stops { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+nav.stops a {
+  text-decoration: none; font-size: 14px; font-weight: 500;
+  padding: 4px 11px; border-radius: 999px; border: 1px solid var(--line);
+  background: var(--paper);
+}
+nav.stops a[aria-current="page"] { background: var(--ink); color: var(--board); border-color: var(--ink); }
+@media (max-width: 720px) { nav.stops { margin-left: 0; } }
+
+/* ---------- hero ---------- */
+.hero { padding-block: 40px 24px; display: grid; grid-template-columns: auto 1fr; gap: 8px 28px; align-items: end; }
+.hero .brush {
+  font-family: var(--f-brush); font-size: clamp(88px, 17vw, 190px); line-height: .85; color: var(--seal);
+  grid-row: span 2;
+}
+.eyebrow { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.hero h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(36px, 6vw, 64px); line-height: 1.02; margin: 4px 0 0; text-wrap: balance; }
+.hero p.lede { margin: 10px 0 0; max-width: 58ch; color: var(--muted); font-size: 18px; }
+@media (max-width: 640px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero .brush { grid-row: auto; }
+}
+
+.facts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.facts span { background: var(--paper); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: 14px; font-variant-numeric: tabular-nums; }
+.facts b { font-weight: 700; }
+
+/* ---------- route strip ---------- */
+.route { margin-block: 8px 28px; overflow-x: auto; }
+.route ol { list-style: none; margin: 0; padding: 8px 2px 6px; display: flex; min-width: max-content; }
+.route li { display: flex; align-items: center; }
+.route li + li::before { content: ""; width: 30px; border-top: 2px dashed var(--muted); opacity: .6; margin-inline: 6px; }
+.route a { display: grid; grid-template-columns: auto auto; gap: 0 8px; align-items: center; text-decoration: none; }
+.route .num {
+  width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; grid-row: span 2;
+  border: 2px solid var(--seal); color: var(--seal); font-weight: 700; font-size: 13px; font-variant-numeric: tabular-nums;
+}
+.route .nm { font-family: var(--f-display); font-size: 16px; line-height: 1.2; }
+.route .dt { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* ---------- board ---------- */
+.board { columns: 4 250px; column-gap: 22px; padding-block: 8px 40px; }
+.board > * { break-inside: avoid; margin: 0 0 26px; display: block; }
+.tilt-a { transform: rotate(-1.6deg); }
+.tilt-b { transform: rotate(1.2deg); }
+.tilt-c { transform: rotate(-.6deg); }
+.tilt-d { transform: rotate(2deg); }
+
+.taped { position: relative; }
+.taped::before {
+  content: ""; position: absolute; top: -11px; left: 50%; width: 92px; height: 24px;
+  transform: translateX(-50%) rotate(-3deg);
+  background: var(--tape); box-shadow: 0 1px 2px rgba(0,0,0,.08); z-index: 2;
+}
+
+.postcard { background: var(--paper); padding: 10px 10px 14px; box-shadow: var(--shadow); text-decoration: none; transition: transform .25s ease; }
+a.postcard:hover { transform: rotate(0deg) scale(1.02); }
+.scene { position: relative; aspect-ratio: 3 / 2; max-width: 100%; overflow: hidden; }
+.scene svg { display: block; width: 100%; height: 100%; }
+.scene .glyph {
+  position: absolute; left: 12px; top: 6px;
+  font-family: var(--f-brush); font-size: 50px; line-height: 1; color: #fffdf6;
+  text-shadow: 0 2px 10px rgba(0,0,0,.35);
+}
+.scene.big .glyph { font-size: 80px; }
+.postcard .day { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: var(--gold); margin-top: 10px; }
+.postcard .cap { font-family: var(--f-hand); font-size: 19px; line-height: 1.25; margin-top: 4px; }
+.postcard .sub { font-size: 14px; color: var(--muted); margin-top: 4px; }
+.postcard .row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+.postcard .who { font-size: 12px; color: var(--muted); }
+.postcard .photos { font-size: 13px; font-weight: 700; color: var(--seal); text-decoration: none; }
+.postcard .photos:hover { text-decoration: underline; }
+.postcard .more { display: inline-block; margin-top: 8px; font-size: 13px; font-weight: 700; color: var(--seal); letter-spacing: .04em; }
+
+.sticky {
+  background: var(--note); color: var(--note-ink);
+  padding: 22px 20px 26px; box-shadow: var(--shadow);
+  font-family: var(--f-hand); font-size: 21px; line-height: 1.3;
+}
+.sticky small { display: block; font-family: var(--f-body); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; opacity: .7; margin-bottom: 6px; }
+
+.ticket {
+  background: var(--paper); box-shadow: var(--shadow); padding: 16px 18px;
+  border-left: 6px solid var(--seal);
+  display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; align-items: center;
+  position: relative;
+}
+.ticket::after { content: ""; position: absolute; right: 12px; top: 10px; bottom: 10px; border-right: 2px dashed var(--line); }
+.ticket .zh { font-family: var(--f-brush); font-size: 40px; line-height: 1; color: var(--seal); grid-row: span 2; }
+.ticket .t { font-family: var(--f-display); font-size: 18px; line-height: 1.2; padding-right: 18px; }
+.ticket .d { font-size: 14px; color: var(--muted); padding-right: 18px; }
+.ticket .lbl { grid-column: 1 / -1; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: var(--gold); margin-bottom: 6px; }
+
+.phrase { background: var(--ink); color: var(--board); padding: 20px; box-shadow: var(--shadow); text-align: center; }
+.phrase .lbl { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; opacity: .7; }
+.phrase .zh { font-family: var(--f-brush); font-size: 64px; line-height: 1.1; margin-top: 6px; }
+.phrase .py { font-family: var(--f-display); font-size: 20px; }
+.phrase .en { font-size: 14px; opacity: .8; margin-top: 2px; }
+
+.swatches { background: var(--paper); padding: 14px; box-shadow: var(--shadow); }
+.swatches .row { display: grid; grid-template-columns: repeat(4, 1fr); height: 64px; }
+.swatches .row span { display: block; }
+.swatches .lbl { font-family: var(--f-hand); font-size: 18px; margin-top: 10px; }
+
+.checklist { background: var(--paper); padding: 18px 20px; box-shadow: var(--shadow);
+  background-image: repeating-linear-gradient(transparent 0 33px, var(--line) 33px 34px); background-position: 0 52px; }
+.checklist h3 { margin: 0 0 8px; font-family: var(--f-display); font-weight: 400; font-size: 20px; }
+.checklist label { display: flex; gap: 10px; align-items: center; min-height: 34px; font-family: var(--f-hand); font-size: 18px; cursor: pointer; line-height: 1.2; }
+.checklist input { width: 18px; height: 18px; accent-color: var(--seal); flex: none; }
+.checklist input:checked + span { text-decoration: line-through; text-decoration-color: var(--seal); opacity: .6; }
+.checklist .count { font-size: 13px; color: var(--muted); margin-top: 6px; font-variant-numeric: tabular-nums; }
+
+.stamp { display: grid; place-items: center; padding: 24px 10px; }
+.stamp .seal { width: 120px; height: 120px; font-size: 46px; transform: rotate(-6deg); box-shadow: var(--shadow); border: 4px double var(--seal-ink); }
+.stamp p { font-family: var(--f-hand); font-size: 18px; text-align: center; margin: 14px 0 0; color: var(--muted); }
+
+/* ---------- city page ---------- */
+.city-hero { padding-block: 32px 12px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 32px; align-items: center; }
+.city-hero .brush { font-family: var(--f-brush); font-size: clamp(84px, 13vw, 150px); line-height: .9; color: var(--seal); }
+.city-hero h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(34px, 5vw, 54px); line-height: 1.05; margin: 6px 0 10px; text-wrap: balance; }
+.city-hero p { margin: 0; color: var(--muted); font-size: 17px; max-width: 52ch; }
+.city-hero .postcard { transform: rotate(1.4deg); }
+@media (max-width: 760px) { .city-hero { grid-template-columns: 1fr; } }
+
+.section-label { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+.section-label::after { content: ""; flex: 1; border-top: 1px solid var(--line); }
+
+.pager { display: flex; justify-content: space-between; gap: 12px; padding-block: 8px 48px; flex-wrap: wrap; }
+.pager a { text-decoration: none; background: var(--paper); box-shadow: var(--shadow); padding: 12px 18px; display: grid; min-width: 0; }
+.pager a small { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.pager a span { font-family: var(--f-display); font-size: 20px; }
+.pager a.next { text-align: right; margin-left: auto; }
+
+footer { padding-block: 12px 40px; color: var(--muted); font-size: 13px; }
+
+@media (max-width: 560px) {
+  .board { columns: 1; }
+  .board > * { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#board"><span class="seal">旅行</span>Our China Board</a>
+    <nav class="stops" id="nav" aria-label="Stops"></nav>
+  </div>
+</header>
+
+<main class="wrap" id="main"></main>
+
+<footer class="wrap">Sketch scenes stand in for photos; tap "Photos" on any card to see the real place. Checklists save in your own browser.</footer>
+
+<script>
+const CITIES = [
+  {
+    id: "shanghai", name: "Shanghai", zh: "上海", dates: "May 17–20", nights: 3, arrive: "Fly into Pudong",
+    tag: "Disney, the Bund and a sci-fi skyline",
+    intro: "We land, sleep at the Toy Story Hotel, and hit Shanghai Disneyland at rope drop for TRON. Then over to the Bund for Yu Garden's curved rooftops and the skyline from 550 m up.",
+    builtFor: "Janette: Disney #1. Josh: Communist Party history. Alex: neon Bund, sci-fi skyline, Yu Garden's rooftops.",
+    sky: ["#2a2f5c", "#d86a6a"], hill: "#1b1e38", style: "skyline", water: true,
+    see: [
+      { zh: "外滩", day: "Wed May 19 · evening", title: "The Bund at night", note: "Lujiazui lit up across the river, or a Huangpu night cruise", who: "All three", q: "The Bund Shanghai night", sky: ["#1f2450", "#c4566e"], style: "skyline", water: true },
+      { zh: "迪士尼", day: "Tue May 18", title: "Shanghai Disneyland", note: "Rope drop, TRON first, stay for the fireworks", who: "All three", q: "Shanghai Disneyland castle", sky: ["#f6c9d6", "#6e7fc4"], style: "plain" },
+      { zh: "豫园", day: "Wed May 19 · afternoon", title: "Yu Garden", note: "Rock gardens and the zigzag bridge, straight out of a fantasy-game town", who: "All three", q: "Yu Garden Shanghai", sky: ["#f2dcc0", "#a3b98a"], style: "plain", water: true },
+      { zh: "上海中心", day: "Wed May 19 · dusk", title: "Shanghai Tower deck", note: "Looking down on the skyline from about 550 m", who: "All three", q: "Shanghai Tower observation deck view", sky: ["#bcd3ec", "#5a6fa8"], style: "skyline" },
+      { zh: "一大", day: "Wed May 19 · late morning", title: "First Party Congress site", note: "Plus the Propaganda Poster Art Centre", who: "Janette + Josh", q: "Site of the First National Congress of the Communist Party Shanghai", sky: ["#e8d6c0", "#a0524a"], style: "plain" }
+    ],
+    eat: [
+      { zh: "小笼包", title: "Xiaolongbao", note: "Bite, sip the soup, then eat" },
+      { zh: "生煎包", title: "Shengjianbao", note: "Pan-fried, crispy bottoms" }
+    ],
+    phrase: { zh: "谢谢", py: "xièxie", en: "Thank you" },
+    note: "Try the TRON test seat first thing, then buy Premier Access.",
+    palette: ["#1f2450", "#c4566e", "#e3b23c", "#86a9ad"]
+  },
+  {
+    id: "beijing", name: "Beijing", zh: "北京", dates: "May 20–23", nights: 3, arrive: "~4.5 hr train",
+    tag: "Emperors, the Wall and 798",
+    intro: "A morning train north. Graffiti factories at 798, lanterns on the Houhai lakes, Tiananmen and the Forbidden City, then the Great Wall at Mutianyu before the heat.",
+    builtFor: "Josh: Tiananmen, Mao, the National Museum. Everyone: the Great Wall.",
+    sky: ["#f2c49b", "#8fb3c9"], hill: "#3f5a52", style: "hills",
+    see: [
+      { zh: "长城", day: "Sat May 22", title: "Great Wall at Mutianyu", note: "Private car at 7 am, enclosed gondola up and down", who: "All three", q: "Mutianyu Great Wall", sky: ["#f6d7a7", "#9cc0d0"] },
+      { zh: "故宫", day: "Fri May 21 · afternoon", title: "Forbidden City", note: "Then Peking duck for dinner", who: "All three", q: "Forbidden City Beijing", sky: ["#e9b38f", "#c75a3e"], style: "plain" },
+      { zh: "798", day: "Thu May 20 · afternoon", title: "798 Art District", note: "Graffiti-covered former factory complex", who: "Alex's pick", q: "798 Art District Beijing", sky: ["#d5d2cf", "#6a6f7c"], style: "plain" },
+      { zh: "后海", day: "Thu May 20 · evening", title: "Houhai lakes", note: "Lanterns along the water", who: "All three", q: "Houhai Beijing night", sky: ["#2d2a4a", "#d9824a"], water: true },
+      { zh: "天安门", day: "Fri May 21 · early", title: "Tiananmen & the National Museum", note: "Mao Mausoleum and the modern-history galleries", who: "Janette + Josh", q: "Tiananmen Square", sky: ["#f3ddc0", "#b8574a"], style: "plain" }
+    ],
+    eat: [
+      { zh: "烤鸭", title: "Peking duck", note: "Thin pancakes, scallion, hoisin" },
+      { zh: "煎饼", title: "Jianbing", note: "Street crêpe for breakfast" }
+    ],
+    phrase: { zh: "你好", py: "nǐ hǎo", en: "Hello" },
+    note: "Forbidden City tickets drop May 14 at 8 pm Beijing time. Set an alarm.",
+    palette: ["#c23a22", "#e3b23c", "#3f5a52", "#8fb3c9"]
+  },
+  {
+    id: "xian", name: "Xi'an", zh: "西安", dates: "May 23–25", nights: 2, arrive: "~4.5 hr train",
+    tag: "Terracotta and Tang-dynasty lanterns",
+    intro: "Night food in the Muslim Quarter and the Grand Tang promenade lit up in Tang style. The Terracotta Army by private car, then the City Wall at South Gate as the lanterns come on.",
+    builtFor: "Janette + Josh: the Terracotta Army. Alex: lantern-lit Tang night streets, plus a full rest day.",
+    sky: ["#f0c58a", "#b5774c"], hill: "#6b4a35", style: "plain",
+    see: [
+      { zh: "兵马俑", day: "Mon May 24", title: "Terracotta Army", note: "Private car and guide, about 5 hours", who: "Janette + Josh", q: "Terracotta Army Xian", sky: ["#e8c89a", "#9a6a46"], style: "plain" },
+      { zh: "大唐", day: "Sun May 23 · evening", title: "Grand Tang Everbright City", note: "Night promenade lit up Tang-dynasty style", who: "All three", q: "Grand Tang Everbright City Xian", sky: ["#3b2c4f", "#e0a04a"], style: "plain" },
+      { zh: "回民街", day: "Sun May 23 · evening", title: "Muslim Quarter food streets", note: "Come hungry", who: "All three", q: "Muslim Quarter Xian night", sky: ["#3b2c4f", "#c4553a"], style: "plain" },
+      { zh: "城墙", day: "Mon May 24 · dusk", title: "City Wall at South Gate", note: "A short walk as the lanterns come on", who: "All three", q: "Xian City Wall South Gate night", sky: ["#f7c98b", "#d36f45"], style: "plain" }
+    ],
+    eat: [
+      { zh: "肉夹馍", title: "Roujiamo", note: "China's original burger" },
+      { zh: "油泼面", title: "Hot-oil noodles", note: "Wide, hand-pulled, chili oil" },
+      { zh: "泡馍", title: "Yangrou paomo", note: "Tear the bread into the soup" }
+    ],
+    phrase: { zh: "多少钱", py: "duōshao qián", en: "How much is it?" },
+    note: "Every warrior has a different face. Find one that looks like us.",
+    palette: ["#9a6a46", "#d36f45", "#f2d6a2", "#3b2c4f"]
+  },
+  {
+    id: "chengdu", name: "Chengdu", zh: "成都", dates: "May 25–27", nights: 2, arrive: "~3.5 hr train",
+    tag: "Panda keepers for a day",
+    intro: "Kuanzhai Alley, face-changing opera and our first hotpot. A full day as panda keepers at Dujiangyan, then everyone at the Chengdu Panda Base at 7:30 am when the pandas are awake.",
+    builtFor: "Janette: the panda keeper day. Everyone: dawn pandas.",
+    sky: ["#dbe8cf", "#6f9a6a"], hill: "#2f5a3a", style: "hills",
+    see: [
+      { zh: "熊猫", day: "Wed May 26", title: "Panda keepers at Dujiangyan", note: "Prep bamboo, make panda cakes, clean enclosures", who: "Janette + Josh", q: "Dujiangyan Panda Base volunteer", sky: ["#e4efd6", "#5f8f5a"] },
+      { zh: "早安", day: "Thu May 27 · 7:30 am", title: "Chengdu Panda Base", note: "Pandas are most active early; shuttle carts for the heat", who: "All three", q: "Chengdu Research Base of Giant Panda Breeding", sky: ["#f3e6c4", "#7aa36a"] },
+      { zh: "变脸", day: "Tue May 25 · evening", title: "Sichuan opera face-changing", note: "Masks swap in a blink", who: "All three", q: "Sichuan opera face changing", sky: ["#5b1e2a", "#d9443a"], style: "plain" },
+      { zh: "锦里", day: "Wed May 26 · evening", title: "Jinli Ancient Street", note: "Lanterns after the panda day", who: "All three", q: "Jinli Ancient Street Chengdu night", sky: ["#2e1f3a", "#d97a3a"], style: "plain" },
+      { zh: "宽窄", day: "Tue May 25 · evening", title: "Kuanzhai Alley", note: "Old lanes, teahouses, snacks", who: "All three", q: "Kuanzhai Alley Chengdu", sky: ["#f0e2c0", "#8aa36b"], style: "plain" }
+    ],
+    eat: [
+      { zh: "火锅", title: "Hotpot", note: "Get the split pot, mild and spicy" },
+      { zh: "麻婆豆腐", title: "Mapo tofu", note: "Numbing and hot at once" }
+    ],
+    phrase: { zh: "微辣", py: "wēi là", en: "A little spicy, please" },
+    note: "Book the panda keeper day by March 31. Only about 20 spots a day.",
+    palette: ["#2f5a3a", "#8aa36b", "#d9443a", "#f0e2c0"]
+  },
+  {
+    id: "chongqing", name: "Chongqing + Wulong", zh: "重庆", dates: "May 27–30", nights: 3, arrive: "~1.5 hr train",
+    tag: "The cyberpunk city and giant stone bridges",
+    intro: "China's most vertical city. Hongya Cave lit up, a monorail through an apartment block, hotpot in a WWII air-raid shelter. Then out to Wulong, where three enormous stone arches span the gorge.",
+    builtFor: "Alex: the cyberpunk city. Josh: the wartime Communist HQ. Everyone: Wulong's giant stone bridges.",
+    sky: ["#2a1f4a", "#c4508a"], hill: "#1a1530", style: "skyline", water: true,
+    see: [
+      { zh: "洪崖洞", day: "Thu May 27 · evening", title: "Hongya Cave lit up", note: "Stacked terraces, then the view from Qiansimen Bridge", who: "All three", q: "Hongyadong Chongqing night", sky: ["#241a40", "#e08a3a"], style: "skyline", water: true },
+      { zh: "天生三桥", day: "Sat May 29", title: "Wulong Three Natural Bridges", note: "Elevator into the gorge, 2 km under the arches. Transformers filmed here.", who: "All three", q: "Wulong Three Natural Bridges", sky: ["#dfe9e0", "#5f8a74"], style: "karst" },
+      { zh: "李子坝", day: "Fri May 28 · afternoon", title: "Liziba monorail station", note: "The train runs straight through a building", who: "All three", q: "Liziba monorail station Chongqing", sky: ["#d8dde6", "#6f7fa0"], style: "skyline" },
+      { zh: "索道", day: "Fri May 28 · afternoon", title: "Yangtze River Cableway", note: "Across the river in a cable car", who: "All three", q: "Yangtze River Cableway Chongqing", sky: ["#e6d4c8", "#7a8aa8"], style: "skyline", water: true },
+      { zh: "红岩", day: "Fri May 28 · morning", title: "Hongyan Revolutionary Memorial", note: "Wartime HQ under Zhou Enlai, plus the Stilwell Museum", who: "Janette + Josh", q: "Hongyan Revolutionary Memorial Hall Chongqing", sky: ["#efe0c8", "#a5584a"], style: "hills" },
+      { zh: "仙女山", day: "Sat May 29 · night", title: "Fairy Mountain", note: "Up in the hills and cooler than the city", who: "All three", q: "Wulong Fairy Mountain Xiannushan", sky: ["#e9f0dc", "#86a87a"], style: "hills" }
+    ],
+    eat: [
+      { zh: "防空洞", title: "Air-raid shelter hotpot", note: "Chongqing invented it" },
+      { zh: "小面", title: "Chongqing xiaomian", note: "Spicy breakfast noodles" }
+    ],
+    phrase: { zh: "巴适", py: "bā shì", en: "Awesome (local slang)" },
+    note: "It feels like an 8D video game map. Stairs go up to streets that are also rooftops.",
+    palette: ["#1a1530", "#c4508a", "#e08a3a", "#5f8a74"]
+  },
+  {
+    id: "zhangjiajie", name: "Zhangjiajie", zh: "张家界", dates: "May 30–Jun 1", nights: 2, arrive: "~2 hr train from Wulong",
+    tag: "The Avatar peaks",
+    intro: "The sandstone pillars behind Avatar's floating mountains and Genshin's Liyue. Tianmen Mountain by cable car, a glass-walled lodge facing the peaks, and the Bailong elevator up the cliff.",
+    builtFor: "Everyone: the Avatar peaks. Alex: Genshin's Liyue was modeled here.",
+    sky: ["#e8eee6", "#8aa9a0"], hill: "#2f4f48", style: "karst",
+    see: [
+      { zh: "袁家界", day: "Mon May 31", title: "Yuanjiajie pillars", note: "The Avatar Hallelujah Mountain and Genshin's Jueyun Karst", who: "All three", q: "Yuanjiajie Avatar Hallelujah Mountain", sky: ["#eef1ea", "#7d9c94"], style: "karst" },
+      { zh: "天门山", day: "Sun May 30 · afternoon", title: "Tianmen Mountain", note: "Cable car, escalators through the mountain, cliffside walkway", who: "Janette + Josh", q: "Tianmen Mountain Zhangjiajie", sky: ["#dfe6ec", "#6c8798"], style: "karst" },
+      { zh: "百龙", day: "Mon May 31", title: "Bailong glass elevator", note: "Straight up the cliff face", who: "All three", q: "Bailong Elevator Zhangjiajie", sky: ["#e6ecef", "#86a2a8"], style: "karst" },
+      { zh: "天子山", day: "Mon May 31", title: "Tianzi Mountain cable car", note: "Riding down through the peaks", who: "All three", q: "Tianzi Mountain cable car Zhangjiajie", sky: ["#f2e3cc", "#7c9a86"], style: "karst" },
+      { zh: "玻璃屋", day: "Sun May 30 · night", title: "Glass-walled lodge", note: "Wake up facing the peaks at Wulingyuan", who: "All three", q: "Zhangjiajie Wulingyuan glass hotel", sky: ["#2a3550", "#c58a6a"], style: "karst" }
+    ],
+    eat: [
+      { zh: "三下锅", title: "Sanxiaguo", note: "Tujia-style dry pot" },
+      { zh: "腊肉", title: "Smoked Tujia pork", note: "Hunan's mountain bacon" }
+    ],
+    phrase: { zh: "好高啊", py: "hǎo gāo a", en: "So high!" },
+    note: "Find the exact spot that looks like the Liyue loading screen.",
+    palette: ["#2f4f48", "#8aa9a0", "#eef1ea", "#c58a6a"]
+  },
+  {
+    id: "yangshuo", name: "Yangshuo", zh: "阳朔", dates: "Jun 1–3", nights: 2, arrive: "~7.5 hr train",
+    tag: "Karst peaks and the 20-yuan view",
+    intro: "A rest day on rails, then a light show staged on the river itself. A private raft past the view printed on the 20-yuan note, a cave with mud pools, and a cave hotel against the cliffs.",
+    builtFor: "Everyone: Li River karsts and the cave hotel. Josh: cool caves.",
+    sky: ["#f5d9c0", "#9cc3c4"], hill: "#3a6b63", style: "karst", water: true,
+    see: [
+      { zh: "漓江", day: "Wed Jun 2 · early", title: "Li River raft from Xingping", note: "Past the view on the 20-yuan note", who: "All three", q: "Li River raft Xingping 20 yuan view", sky: ["#f3e1c8", "#95bfc0"], style: "karst", water: true },
+      { zh: "印象", day: "Tue Jun 1 · evening", title: "Impression Sanjie Liu", note: "A light show staged on the river", who: "All three", q: "Impression Sanjie Liu Yangshuo", sky: ["#141a3a", "#c4508a"], style: "karst", water: true },
+      { zh: "银子岩", day: "Wed Jun 2 · afternoon", title: "Silver Cave and mud pools", note: "Caves stay cool", who: "Janette + Josh", q: "Yangshuo Silver Cave", sky: ["#2c2f5a", "#4fa3a0"], style: "karst" },
+      { zh: "西街", day: "Wed Jun 2 · evening", title: "West Street", note: "Night market in town", who: "All three", q: "West Street Yangshuo night", sky: ["#2a2440", "#d98a4a"], style: "plain" }
+    ],
+    eat: [
+      { zh: "啤酒鱼", title: "Yangshuo beer fish", note: "Fresh from the Li River" },
+      { zh: "米粉", title: "Guilin rice noodles", note: "Breakfast for a few yuan" }
+    ],
+    phrase: { zh: "太美了", py: "tài měi le", en: "So beautiful!" },
+    note: "Bring a 20-yuan note and hold it up to the real view.",
+    palette: ["#3a6b63", "#9cc3c4", "#f5d9c0", "#7c9e5a"]
+  },
+  {
+    id: "hongkong", name: "Hong Kong", zh: "香港", dates: "Jun 3–5", nights: 2, arrive: "~3.5–4 hr train",
+    tag: "Neon, the harbor and Disney #2",
+    intro: "The Star Ferry, Victoria Peak at night and Mong Kok's neon streets. Hong Kong Disneyland for the day, and the Big Buddha by cable car before the flight home.",
+    builtFor: "Janette: Disney #2. Alex: Mong Kok neon and the harbor skyline at night.",
+    sky: ["#1c2550", "#e06a7a"], hill: "#121838", style: "skyline", water: true,
+    see: [
+      { zh: "旺角", day: "Thu Jun 3 · evening", title: "Mong Kok neon", note: "Streets out of a cyberpunk game", who: "All three", q: "Mong Kok neon night", sky: ["#1a1438", "#e0508a"], style: "skyline" },
+      { zh: "天星", day: "Thu Jun 3 · evening", title: "Star Ferry", note: "Across the harbor at night", who: "All three", q: "Star Ferry Hong Kong night", sky: ["#1f2a58", "#d4706a"], style: "skyline", water: true },
+      { zh: "山顶", day: "Thu Jun 3 · night", title: "Victoria Peak", note: "The whole skyline from above", who: "All three", q: "Victoria Peak Hong Kong night", sky: ["#151c40", "#7a5aa8"], style: "skyline" },
+      { zh: "迪士尼", day: "Fri Jun 4", title: "Hong Kong Disneyland", note: "Alex can join for the evening show", who: "Janette + Josh", q: "Hong Kong Disneyland castle", sky: ["#f4cfe0", "#7a8ad0"], style: "plain" },
+      { zh: "大佛", day: "Sat Jun 5 · morning", title: "Tian Tan Buddha", note: "Ngong Ping cable car, right by the airport", who: "All three", q: "Ngong Ping 360 Tian Tan Buddha", sky: ["#e6eef0", "#86a9ad"], style: "hills" }
+    ],
+    eat: [
+      { zh: "点心", title: "Dim sum", note: "Har gow and siu mai" },
+      { zh: "蛋挞", title: "Egg tarts", note: "Still warm from the bakery" },
+      { zh: "菠萝包", title: "Pineapple bun", note: "No pineapple, just a crackly top" }
+    ],
+    phrase: { zh: "唔該", py: "m̀h gōi", en: "Thanks / excuse me (Cantonese)" },
+    note: "Last night of the trip: toast to 19 nights from the Peak.",
+    palette: ["#121838", "#e06a7a", "#e3b23c", "#86a9ad"]
+  }
+];
+
+const WISHES = [
+  "Be at the Shanghai Disney gate for rope drop.",
+  "Spend a whole day as panda keepers.",
+  "Hold a 20-yuan note up to the real Li River view.",
+  "Find Genshin's Liyue in the Zhangjiajie peaks.",
+  "Ride a monorail through an apartment building."
+];
+
+/* ---------- procedural ink-wash scenes ---------- */
+function hash(s) { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+function rng(seed) { let a = seed; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+function ridge(r, base, amp, step, style) {
+  const pts = [];
+  for (let x = -10; x <= 310; x += step) {
+    let y = base - r() * amp;
+    if (style === "karst") y = base - (r() < .55 ? amp * (.6 + r() * .5) : amp * r() * .25);
+    pts.push([x, y]);
+  }
+  let d = `M-10,200 L${pts[0][0]},${pts[0][1].toFixed(1)}`;
+  for (let i = 1; i < pts.length; i++) {
+    const [px, py] = pts[i - 1], [x, y] = pts[i];
+    const mx = (px + x) / 2, top = Math.min(py, y);
+    d += style === "karst"
+      ? ` C${(px + step * .35).toFixed(1)},${py.toFixed(1)} ${(mx - step * .15).toFixed(1)},${(top - 6).toFixed(1)} ${mx.toFixed(1)},${(top - 4).toFixed(1)} S${(x - step * .35).toFixed(1)},${y.toFixed(1)} ${x},${y.toFixed(1)}`
+      : ` Q${px},${py.toFixed(1)} ${mx.toFixed(1)},${((py + y) / 2).toFixed(1)}`;
+  }
+  return d + " L310,200 Z";
+}
+
+function skyline(r, base) {
+  let d = "", x = -4;
+  while (x < 304) {
+    const w = 8 + r() * 16, h = 18 + r() * 60;
+    d += `<rect x="${x.toFixed(1)}" y="${(base - h).toFixed(1)}" width="${w.toFixed(1)}" height="${(h + 80).toFixed(1)}" />`;
+    x += w + 1;
+  }
+  const t = 120 + r() * 120;
+  d += `<rect x="${(t - 2).toFixed(0)}" y="${base - 112}" width="4" height="112"/><circle cx="${t.toFixed(0)}" cy="${base - 70}" r="9"/><circle cx="${t.toFixed(0)}" cy="${base - 100}" r="5"/>`;
+  return d;
+}
+
+let sceneId = 0;
+function scene(key, sky, hill, style = "hills", water = false) {
+  const r = rng(hash(key)); const id = "g" + (sceneId++);
+  const sunX = 60 + r() * 180, sunY = 40 + r() * 30;
+  let layers = "";
+  for (let i = 0; i < 3; i++) {
+    const base = (water ? 118 : 132) + i * 20;
+    const amp = style === "karst" ? 70 - i * 12 : style === "plain" ? 14 + i * 4 : 44 - i * 8;
+    const step = style === "karst" ? 26 + r() * 10 : 30;
+    layers += `<path d="${ridge(r, base, amp, step, style)}" fill="${hill}" opacity="${(.28 + i * .26).toFixed(2)}"/>`;
+  }
+  if (style === "skyline") layers = `<path d="${ridge(r, 150, 10, 40, "plain")}" fill="${hill}" opacity=".3"/><g fill="${hill}" opacity=".92">${skyline(r, 150)}</g>`;
+  if (style === "plain") layers += `<g fill="${hill}" opacity=".85"><path d="M${(r() * 120 + 70).toFixed(0)},150 l26,-18 l26,18 l-6,0 l0,30 l-40,0 l0,-30 z"/><path d="M${(r() * 60 + 190).toFixed(0)},154 l18,-12 l18,12 l-4,0 l0,26 l-28,0 l0,-26 z"/></g>`;
+  const waterSvg = water ? `<rect x="0" y="152" width="300" height="48" fill="${sky[1]}" opacity=".55"/>` +
+    [0, 1, 2, 3].map(i => `<line x1="${(r() * 220).toFixed(0)}" x2="${(r() * 220 + 60).toFixed(0)}" y1="${160 + i * 9}" y2="${160 + i * 9}" stroke="#ffffff" stroke-opacity=".45" stroke-width="1.2"/>`).join("") : "";
+  return `<svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sky[0]}"/><stop offset="1" stop-color="${sky[1]}"/></linearGradient></defs>
+    <rect width="300" height="200" fill="url(#${id})"/>
+    <circle cx="${sunX.toFixed(0)}" cy="${sunY.toFixed(0)}" r="16" fill="#fff6e4" opacity=".7"/>
+    ${layers}${waterSvg}
+  </svg>`;
+}
+
+/* ---------- builders ---------- */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const tilts = ["tilt-a", "tilt-b", "tilt-c", "tilt-d"];
+const tilt = i => tilts[i % tilts.length];
+const photoUrl = q => "https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(q);
+const shortName = c => c.name.split(" +")[0];
+
+function postcardCity(c, i) {
+  const s = c.see[0];
+  return `<a class="postcard taped ${tilt(i)}" href="#${c.id}">
+    <div class="scene">${scene(c.id + "-cover", c.sky, c.hill, c.style, c.water)}<span class="glyph">${c.zh}</span></div>
+    <div class="day">Stop ${i + 1} · ${esc(c.dates)} · ${c.nights} nights</div>
+    <div class="cap">${esc(c.name)}</div>
+    <div class="sub">${esc(c.tag)}</div>
+    <span class="more">Open board →</span>
+  </a>`;
+}
+function spotBody(s) {
+  return `<div class="day">${esc(s.day)}</div><div class="cap">${esc(s.title)}</div><div class="sub">${esc(s.note)}</div>
+    <div class="row"><span class="who">${esc(s.who)}</span><a class="photos" href="${photoUrl(s.q)}" target="_blank" rel="noopener">Photos ↗</a></div>`;
+}
+function postcardSpot(c, s, i) {
+  return `<figure class="postcard ${i % 2 ? "" : "taped"} ${tilt(i + 1)}">
+    <div class="scene">${scene(c.id + s.title, s.sky, c.hill, s.style || c.style, s.water)}<span class="glyph">${s.zh}</span></div>
+    <figcaption>${spotBody(s)}</figcaption>
+  </figure>`;
+}
+const ticket = (f, i) => `<div class="ticket ${tilt(i + 2)}"><div class="lbl">Must eat</div><div class="zh">${f.zh}</div><div class="t">${esc(f.title)}</div><div class="d">${esc(f.note)}</div></div>`;
+const sticky = (text, label, i) => `<div class="sticky ${tilt(i)}"><small>${esc(label)}</small>${esc(text)}</div>`;
+
+function load(key) { try { return JSON.parse(localStorage.getItem(key) || "[]"); } catch { return []; } }
+function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
+
+function checklist(c) {
+  const items = [...c.see.map(s => s.title), ...c.eat.map(f => "Eat " + f.title.charAt(0).toLowerCase() + f.title.slice(1))];
+  const done = load("done-" + c.id);
+  return `<div class="checklist tilt-c" data-city="${c.id}">
+    <h3>${esc(shortName(c))} bucket list</h3>
+    ${items.map((t, i) => `<label><input type="checkbox" id="chk-${c.id}-${i}" data-i="${i}" ${done.includes(i) ? "checked" : ""}><span>${esc(t)}</span></label>`).join("")}
+    <div class="count"></div>
+  </div>`;
+}
+
+function cityPage(c) {
+  const idx = CITIES.indexOf(c);
+  const prev = CITIES[idx - 1], next = CITIES[idx + 1];
+  const [hero, ...rest] = c.see;
+  const tiles = rest.map((s, i) => postcardSpot(c, s, i));
+  c.eat.forEach((f, i) => tiles.splice(1 + i * 2, 0, ticket(f, i)));
+  tiles.splice(2, 0, sticky(c.builtFor, "Built for", 1));
+  tiles.splice(4, 0, `<div class="phrase tilt-b"><div class="lbl">Phrase to learn</div><div class="zh">${c.phrase.zh}</div><div class="py">${c.phrase.py}</div><div class="en">${esc(c.phrase.en)}</div></div>`);
+  tiles.splice(6, 0, sticky(c.note, "Note to us", 3));
+  tiles.push(`<div class="swatches taped tilt-a"><div class="row">${c.palette.map(p => `<span style="background:${p}"></span>`).join("")}</div><div class="lbl">The colors of ${esc(shortName(c))}</div></div>`);
+  tiles.push(checklist(c));
+  tiles.push(`<div class="stamp"><span class="seal">${c.zh}</span><p>Stop ${idx + 1} of ${CITIES.length}</p></div>`);
+
+  return `
+  <section class="city-hero">
+    <div>
+      <div class="brush" lang="zh">${c.zh}</div>
+      <div class="eyebrow">Stop ${idx + 1} of ${CITIES.length}</div>
+      <h1>${esc(c.name)}</h1>
+      <p>${esc(c.intro)}</p>
+      <div class="facts"><span><b>${esc(c.dates)}</b></span><span>${c.nights} nights</span><span>${esc(c.arrive)}</span></div>
+    </div>
+    <figure class="postcard taped" style="margin:0">
+      <div class="scene big">${scene(c.id + hero.title, hero.sky, c.hill, hero.style || c.style, hero.water)}<span class="glyph">${hero.zh}</span></div>
+      <figcaption>${spotBody(hero)}</figcaption>
+    </figure>
+  </section>
+  <div class="section-label eyebrow">The board</div>
+  <section class="board">${tiles.join("")}</section>
+  <nav class="pager" aria-label="Next and previous stop">
+    ${prev ? `<a href="#${prev.id}"><small>← Previous stop</small><span>${esc(prev.name)}</span></a>` : `<a href="#board"><small>← Back to</small><span>The whole trip</span></a>`}
+    ${next ? `<a class="next" href="#${next.id}"><small>Next stop →</small><span>${esc(next.name)}</span></a>` : `<a class="next" href="#board"><small>Fly home Jun 5 →</small><span>The whole trip</span></a>`}
+  </nav>`;
+}
+
+function homePage() {
+  const tiles = CITIES.map(postcardCity);
+  tiles.splice(1, 0, sticky(WISHES[0], "Trip goal", 1));
+  tiles.splice(4, 0, sticky(WISHES[1], "Trip goal", 3));
+  tiles.splice(6, 0, `<div class="phrase tilt-a"><div class="lbl">First word to learn</div><div class="zh">你好</div><div class="py">nǐ hǎo</div><div class="en">Hello</div></div>`);
+  tiles.splice(9, 0, sticky(WISHES[2], "Trip goal", 2));
+  tiles.push(sticky(WISHES[3], "Trip goal", 0));
+  tiles.push(`<div class="stamp"><span class="seal">中国</span><p>Eight stops. No flights in between.</p></div>`);
+  tiles.push(sticky(WISHES[4], "Trip goal", 1));
+  return `
+  <section class="hero">
+    <div class="brush" lang="zh">中国</div>
+    <div class="eyebrow">Janette, Josh &amp; Alex</div>
+    <div>
+      <h1>China 2027</h1>
+      <p class="lede">One rail arc from Shanghai to Hong Kong: Disney twice, the Great Wall, pandas, a cyberpunk city, the Avatar peaks and the 20-yuan river. Open any stop to see its board.</p>
+      <div class="facts"><span><b>May 17 – Jun 5, 2027</b></span><span>8 stops</span><span>19 nights</span><span>All by train</span></div>
+    </div>
+  </section>
+  <div class="route" aria-label="Route">
+    <ol>${CITIES.map((c, i) => `<li><a href="#${c.id}"><span class="num">${i + 1}</span><span class="nm">${esc(shortName(c))}</span><span class="dt">${esc(c.dates)}</span></a></li>`).join("")}</ol>
+  </div>
+  <section class="board">${tiles.join("")}</section>`;
+}
+
+/* ---------- routing ---------- */
+const main = document.getElementById("main");
+const nav = document.getElementById("nav");
+nav.innerHTML = CITIES.map(c => `<a href="#${c.id}">${esc(shortName(c))}</a>`).join("");
+
+function bindChecklists() {
+  main.querySelectorAll(".checklist").forEach(box => {
+    const key = "done-" + box.dataset.city;
+    const count = box.querySelector(".count");
+    const update = () => {
+      const all = [...box.querySelectorAll("input")];
+      const done = all.filter(x => x.checked).map(x => +x.dataset.i);
+      count.textContent = `${done.length} of ${all.length} done`;
+      return done;
+    };
+    update();
+    box.addEventListener("change", () => save(key, update()));
+  });
+}
+
+function route() {
+  const id = location.hash.slice(1);
+  const city = CITIES.find(c => c.id === id);
+  sceneId = 0;
+  main.innerHTML = city ? cityPage(city) : homePage();
+  nav.querySelectorAll("a").forEach(a => {
+    if (a.getAttribute("href") === "#" + id) a.setAttribute("aria-current", "page");
+    else a.removeAttribute("aria-current");
+  });
+  document.title = city ? `${city.name} · Our China Board` : "Our China Board";
+  bindChecklists();
+  window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", route);
+route();
+</script>
+
+</body>
+</html>
