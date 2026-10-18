@@ -217,6 +217,43 @@ a.postcard:hover { transform: rotate(0deg) scale(1.02); }
 .pager a span { font-family: var(--f-display); font-size: 20px; }
 .pager a.next { text-align: right; margin-left: auto; }
 
+/* ---------- guided tours (brochure cards) ---------- */
+.tours-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; margin-top: 4px; }
+.tours-head h2, .alt-city h2 { font-family: var(--f-display); font-weight: 400; font-size: 28px; margin: 0; }
+.tours-head p { margin: 0; color: var(--muted); font-size: 14px; }
+.tours { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 18px; padding-block: 16px 40px; }
+.tour {
+  background: var(--paper); box-shadow: var(--shadow); padding: 0 18px 16px;
+  display: flex; flex-direction: column; gap: 6px; min-width: 0;
+  border-top: 8px solid var(--seal);
+}
+.tour .len { align-self: flex-start; background: var(--seal); color: var(--seal-ink); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; padding: 3px 10px 4px; border-radius: 0 0 6px 6px; }
+.tour h3 { font-family: var(--f-display); font-weight: 400; font-size: 19px; line-height: 1.2; margin: 6px 0 0; }
+.tour p { margin: 0; color: var(--muted); font-size: 14px; flex: 1; }
+.tour a { font-size: 13px; font-weight: 700; color: var(--seal); text-decoration: none; margin-top: 4px; }
+.tour a:hover { text-decoration: underline; }
+
+/* ---------- alternatives page ---------- */
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 4px 8px; }
+.filters button {
+  font: 500 14px var(--f-body); color: var(--ink); background: var(--paper);
+  border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; cursor: pointer;
+}
+.filters button[aria-pressed="true"] { background: var(--ink); color: var(--board); border-color: var(--ink); }
+.alt-city { padding-block: 22px 4px; border-bottom: 1px solid var(--line); }
+.alt-city header { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.alt-city .zh { font-family: var(--f-brush); font-size: 44px; line-height: 1; color: var(--seal); }
+.alt-city header a { font-size: 13px; color: var(--muted); }
+.alts { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; padding-block: 14px 20px; }
+.alt { background: var(--paper); box-shadow: var(--shadow); padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.alt h3 { font-family: var(--f-hand); font-weight: 700; font-size: 19px; line-height: 1.2; margin: 0; }
+.alt p { margin: 0; font-size: 14px; color: var(--muted); flex: 1; }
+.alt .foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.tags span { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--gold); border: 1px solid currentColor; border-radius: 4px; padding: 1px 6px; }
+.alt a { font-size: 13px; font-weight: 700; color: var(--seal); text-decoration: none; }
+.empty { color: var(--muted); font-style: italic; padding-block: 8px 16px; }
+
 footer { padding-block: 12px 40px; color: var(--muted); font-size: 13px; }
 
 @media (max-width: 560px) {
@@ -413,6 +450,101 @@ const CITIES = [
   }
 ];
 
+/* Popular guided tours per stop. Links search for current operators and prices. */
+const TOURS = {
+  shanghai: [
+    { length: "Evening", title: "Old Shanghai night food walk", note: "Small-group tasting tour through old lanes: xiaolongbao, shengjian, scallion pancakes.", q: "Shanghai evening food tour" },
+    { length: "Half day", title: "Zhujiajiao water town", note: "Guide and car to a canal town about an hour out, with a covered boat ride.", q: "Zhujiajiao water town tour from Shanghai" },
+    { length: "Half day", title: "French Concession walking tour", note: "Plane-tree streets, art deco villas and hidden lane houses with a local guide.", q: "French Concession walking tour Shanghai" }
+  ],
+  beijing: [
+    { length: "Full day", title: "Mutianyu Great Wall private tour", note: "Private car and English-speaking guide, with gondola tickets included.", q: "Mutianyu Great Wall private tour" },
+    { length: "Half day", title: "Hutong walk with a family lunch", note: "Walk the alleys and eat in a courtyard home with a local family.", q: "Beijing hutong walking tour family lunch" },
+    { length: "Evening", title: "Ghost Street food tour", note: "Crayfish, hotpot and skewers on Guijie's lantern-lined strip.", q: "Beijing Ghost Street Guijie food tour" }
+  ],
+  xian: [
+    { length: "Half day", title: "Terracotta Army guided tour", note: "A guide explains the pits and the emperor's story; skip the queue.", q: "Terracotta Army private guided tour" },
+    { length: "Evening", title: "Muslim Quarter night food tour", note: "Roujiamo, persimmon cakes and lamb skewers with a guide who knows the stalls.", q: "Xian Muslim Quarter night food tour" },
+    { length: "Evening", title: "Tang Dynasty show and dumpling banquet", note: "Music and dance in Tang costume over a many-course dumpling dinner.", q: "Xian Tang Dynasty show dumpling banquet" }
+  ],
+  chengdu: [
+    { length: "Early morning", title: "Panda base guided morning", note: "A guide gets you in at opening and to the busiest enclosures first.", q: "Chengdu panda base guided tour morning" },
+    { length: "Full day", title: "Leshan Giant Buddha day trip", note: "The 71 m cliff Buddha, seen from the river boat or on foot.", q: "Leshan Giant Buddha day tour from Chengdu" },
+    { length: "Half day", title: "Market visit and Sichuan cooking class", note: "Shop the wet market, then cook mapo tofu and kung pao chicken.", q: "Chengdu Sichuan cooking class market tour" }
+  ],
+  chongqing: [
+    { length: "Evening", title: "Chongqing night lights tour", note: "Hongya Cave, the Yangtze Cableway and a river cruise in one guided evening.", q: "Chongqing night tour Hongyadong river cruise" },
+    { length: "Full day", title: "Wulong Karst day tour", note: "Transfers, tickets and a guide for the Three Natural Bridges.", q: "Wulong Karst day tour from Chongqing" },
+    { length: "Full day", title: "Dazu Rock Carvings", note: "UNESCO-listed Buddhist cliff carvings, painted and remarkably intact.", q: "Dazu Rock Carvings day tour from Chongqing" }
+  ],
+  zhangjiajie: [
+    { length: "Full day", title: "Forest Park private guided tour", note: "A guide plans the shuttle and elevator route around the crowds.", q: "Zhangjiajie National Forest Park private guided tour" },
+    { length: "Half day", title: "Tianmen Mountain guided tour", note: "Cable car, the cliff walkway and Heaven's Gate with a guide.", q: "Tianmen Mountain guided tour" },
+    { length: "Half day", title: "Furong ancient town", note: "A Tujia village built over a waterfall, best in the evening.", q: "Furong ancient town tour from Zhangjiajie" }
+  ],
+  yangshuo: [
+    { length: "Half day", title: "Li River cruise, Guilin to Yangshuo", note: "The big-boat version: seated, shaded, and past the best karst scenery.", q: "Li River cruise Guilin to Yangshuo" },
+    { length: "Half day", title: "Yangshuo cooking class", note: "Pick vegetables at the market, then cook beer fish and stuffed dishes.", q: "Yangshuo cooking school class" },
+    { length: "Full day", title: "Longji rice terraces", note: "The Dragon's Backbone terraces and Zhuang and Yao villages.", q: "Longji rice terraces day tour" }
+  ],
+  hongkong: [
+    { length: "Half day", title: "Hong Kong food tour", note: "Dim sum, roast goose, egg tarts and milk tea in Sham Shui Po or Central.", q: "Hong Kong food tour Sham Shui Po" },
+    { length: "Full day", title: "Lantau Island tour", note: "Big Buddha, Po Lin Monastery and the stilt houses of Tai O.", q: "Lantau Island tour Big Buddha Tai O" },
+    { length: "Full day", title: "Macau day trip", note: "Over the sea bridge to Portuguese streets and the Ruins of St. Paul's.", q: "Macau day trip from Hong Kong" }
+  ]
+};
+
+/* Swap-ins for rain, heat or rest days. */
+const ALTS = {
+  shanghai: [
+    { title: "teamLab Borderless Shanghai", note: "Walk-through digital art rooms that react as you move.", tags: ["Indoor"], q: "teamLab Borderless Shanghai" },
+    { title: "Shanghai Museum East", note: "The huge new museum in Pudong: bronzes, jade and ceramics.", tags: ["Indoor"], q: "Shanghai Museum East" },
+    { title: "Shanghai Astronomy Museum", note: "Meteorites and a giant planetarium dome.", tags: ["Indoor"], q: "Shanghai Astronomy Museum" },
+    { title: "Huangpu River night cruise", note: "Sit back and watch both skylines light up.", tags: ["Evening", "Easy pace"], q: "Huangpu River night cruise" }
+  ],
+  beijing: [
+    { title: "Universal Beijing Resort", note: "Harry Potter, Transformers and Kung Fu Panda lands.", tags: ["Theme park"], q: "Universal Beijing Resort" },
+    { title: "Summer Palace", note: "Lakeside palaces; take the big dragon boat across Kunming Lake.", tags: ["Easy pace"], q: "Summer Palace Beijing" },
+    { title: "Temple of Heaven at dawn", note: "Locals doing tai chi, dancing and singing in the park.", tags: ["Early"], q: "Temple of Heaven morning tai chi" },
+    { title: "Beijing acrobatics show", note: "An hour of jaw-dropping balancing acts in a cool theater.", tags: ["Evening", "Indoor"], q: "Beijing acrobatics show Chaoyang Theatre" }
+  ],
+  xian: [
+    { title: "Shaanxi History Museum", note: "Tang gold, murals and bronzes; book a free slot ahead.", tags: ["Indoor"], q: "Shaanxi History Museum" },
+    { title: "Big Wild Goose Pagoda fountain show", note: "Asia's largest music fountain, free in the evening.", tags: ["Evening", "Easy pace"], q: "Big Wild Goose Pagoda fountain show" },
+    { title: "Song of Everlasting Sorrow", note: "An outdoor Tang love story staged on the mountain at Huaqing Palace.", tags: ["Evening"], q: "Song of Everlasting Sorrow show Huaqing Palace" }
+  ],
+  chengdu: [
+    { title: "Sanxingdui Museum", note: "3,000-year-old bronze masks with bulging eyes. They look like game art.", tags: ["Indoor", "Day trip"], q: "Sanxingdui Museum bronze masks" },
+    { title: "People's Park teahouse", note: "Bamboo chairs, endless tea and people-watching.", tags: ["Easy pace"], q: "People's Park teahouse Chengdu" },
+    { title: "Wenshu Monastery", note: "A quiet working temple with its own vegetarian restaurant.", tags: ["Easy pace"], q: "Wenshu Monastery Chengdu" },
+    { title: "Leshan Giant Buddha", note: "The 71 m cliff Buddha, if you want a bigger day out.", tags: ["Day trip"], q: "Leshan Giant Buddha" }
+  ],
+  chongqing: [
+    { title: "Raffles City Crystal", note: "A glass skybridge laid sideways across four towers, 250 m up.", tags: ["Indoor"], q: "Raffles City Chongqing The Crystal" },
+    { title: "Three Gorges Museum", note: "The story of the Yangtze before and after the dam.", tags: ["Indoor"], q: "Three Gorges Museum Chongqing" },
+    { title: "Ciqikou ancient town", note: "Old riverside lanes full of snacks and teahouses.", tags: ["Easy pace"], q: "Ciqikou ancient town Chongqing" },
+    { title: "Eling Park at night", note: "The best skyline lookout in the city.", tags: ["Evening"], q: "Eling Park Chongqing night view" }
+  ],
+  zhangjiajie: [
+    { title: "Yellow Dragon Cave", note: "Huge lit caverns with an underground river boat. Cool all day.", tags: ["Indoor"], q: "Yellow Dragon Cave Zhangjiajie" },
+    { title: "Baofeng Lake", note: "A green lake between the peaks, toured by large covered boat.", tags: ["Easy pace"], q: "Baofeng Lake Zhangjiajie" },
+    { title: "Charming Xiangxi show", note: "Tujia and Miao songs, dances and costumes.", tags: ["Evening", "Indoor"], q: "Charming Xiangxi show Zhangjiajie" }
+  ],
+  yangshuo: [
+    { title: "Reed Flute Cave", note: "Guilin's rainbow-lit cave, a good stop on the way in or out.", tags: ["Indoor"], q: "Reed Flute Cave Guilin" },
+    { title: "Xianggong Hill sunrise", note: "Mist over the river bends and peaks at first light.", tags: ["Early"], q: "Xianggong Hill sunrise" },
+    { title: "Xingping old town", note: "A slow afternoon in the village near the 20-yuan view.", tags: ["Easy pace"], q: "Xingping old town Yangshuo" },
+    { title: "Longji rice terraces", note: "Terraces carved down whole mountainsides.", tags: ["Day trip"], q: "Longji rice terraces" }
+  ],
+  hongkong: [
+    { title: "Ocean Park", note: "Pandas, an aquarium and cable cars over the sea.", tags: ["Theme park"], q: "Ocean Park Hong Kong" },
+    { title: "M+ museum", note: "Design and pop culture on the harbor at West Kowloon.", tags: ["Indoor"], q: "M+ museum Hong Kong" },
+    { title: "Symphony of Lights", note: "The free 8 pm harbor light show, best from Tsim Sha Tsui.", tags: ["Evening", "Easy pace"], q: "Symphony of Lights Hong Kong" },
+    { title: "Temple Street night market", note: "Street food, fortune tellers and Cantonese opera singers.", tags: ["Evening"], q: "Temple Street night market" }
+  ]
+};
+const ALT_TAGS = ["Indoor", "Evening", "Easy pace", "Early", "Day trip", "Theme park"];
+
 const WISHES = [
   "Be at the Shanghai Disney gate for rope drop.",
   "Spend a whole day as panda keepers.",
@@ -550,6 +682,9 @@ function cityPage(c) {
   </section>
   <div class="section-label eyebrow">The board</div>
   <section class="board">${tiles.join("")}</section>
+  <div class="section-label eyebrow">Popular guided tours</div>
+  <div class="tours-head"><h2>Tours in ${esc(shortName(c))}</h2><p>Links open a search for current operators and prices. <a href="#alternatives">See alternative activities →</a></p></div>
+  <section class="tours">${(TOURS[c.id] || []).map(t => `<article class="tour"><span class="len">${esc(t.length)}</span><h3>${esc(t.title)}</h3><p>${esc(t.note)}</p><a href="https://www.google.com/search?q=${encodeURIComponent(t.q)}" target="_blank" rel="noopener">Find this tour ↗</a></article>`).join("")}</section>
   <nav class="pager" aria-label="Next and previous stop">
     ${prev ? `<a href="#${prev.id}"><small>← Previous stop</small><span>${esc(prev.name)}</span></a>` : `<a href="#board"><small>← Back to</small><span>The whole trip</span></a>`}
     ${next ? `<a class="next" href="#${next.id}"><small>Next stop →</small><span>${esc(next.name)}</span></a>` : `<a class="next" href="#board"><small>Fly home Jun 5 →</small><span>The whole trip</span></a>`}
@@ -581,10 +716,48 @@ function homePage() {
   <section class="board">${tiles.join("")}</section>`;
 }
 
+function altsPage() {
+  return `
+  <section class="hero">
+    <div class="brush" lang="zh">备选</div>
+    <div class="eyebrow">Plan B, stop by stop</div>
+    <div>
+      <h1>Alternative activities</h1>
+      <p class="lede">Swap-ins for a rainy afternoon, a scorching midday, a rest day or a free evening. Filter for what you need.</p>
+    </div>
+  </section>
+  <div class="filters" role="group" aria-label="Filter activities">
+    <button type="button" id="f-all" data-tag="" aria-pressed="true">All</button>
+    ${ALT_TAGS.map(t => `<button type="button" id="f-${t.replace(/\s/g, "-").toLowerCase()}" data-tag="${t}" aria-pressed="false">${t}</button>`).join("")}
+  </div>
+  ${CITIES.map(c => `<section class="alt-city" data-city="${c.id}">
+    <header><span class="zh" lang="zh">${c.zh}</span><h2>${esc(c.name)}</h2><a href="#${c.id}">${esc(c.dates)} · open board</a></header>
+    <div class="alts">${(ALTS[c.id] || []).map(a => `<article class="alt" data-tags="${a.tags.join("|")}"><h3>${esc(a.title)}</h3><p>${esc(a.note)}</p><div class="foot"><div class="tags">${a.tags.map(t => `<span>${t}</span>`).join("")}</div><a href="${photoUrl(a.q)}" target="_blank" rel="noopener">Photos ↗</a></div></article>`).join("")}</div>
+    <p class="empty" hidden>Nothing tagged that here.</p>
+  </section>`).join("")}
+  <div style="height:40px"></div>`;
+}
+
+function bindFilters() {
+  const btns = main.querySelectorAll(".filters button");
+  btns.forEach(b => b.addEventListener("click", () => {
+    const tag = b.dataset.tag;
+    btns.forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    main.querySelectorAll(".alt-city").forEach(sec => {
+      let shown = 0;
+      sec.querySelectorAll(".alt").forEach(a => {
+        const ok = !tag || a.dataset.tags.split("|").includes(tag);
+        a.hidden = !ok; if (ok) shown++;
+      });
+      sec.querySelector(".empty").hidden = shown > 0;
+    });
+  }));
+}
+
 /* ---------- routing ---------- */
 const main = document.getElementById("main");
 const nav = document.getElementById("nav");
-nav.innerHTML = CITIES.map(c => `<a href="#${c.id}">${esc(shortName(c))}</a>`).join("");
+nav.innerHTML = CITIES.map(c => `<a href="#${c.id}">${esc(shortName(c))}</a>`).join("") + `<a href="#alternatives">Alternatives</a>`;
 
 function bindChecklists() {
   main.querySelectorAll(".checklist").forEach(box => {
@@ -605,12 +778,14 @@ function route() {
   const id = location.hash.slice(1);
   const city = CITIES.find(c => c.id === id);
   sceneId = 0;
-  main.innerHTML = city ? cityPage(city) : homePage();
+  const alts = id === "alternatives";
+  main.innerHTML = city ? cityPage(city) : alts ? altsPage() : homePage();
+  if (alts) bindFilters();
   nav.querySelectorAll("a").forEach(a => {
     if (a.getAttribute("href") === "#" + id) a.setAttribute("aria-current", "page");
     else a.removeAttribute("aria-current");
   });
-  document.title = city ? `${city.name} · Our China Board` : "Our China Board";
+  document.title = city ? `${city.name} · Our China Board` : alts ? "Alternatives · Our China Board" : "Our China Board";
   bindChecklists();
   window.scrollTo(0, 0);
 }
