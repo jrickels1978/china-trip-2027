@@ -248,6 +248,22 @@ a.postcard:hover { transform: rotate(0deg) scale(1.02); }
 .tour a { font-size: 13px; font-weight: 700; color: var(--seal); text-decoration: none; margin-top: 4px; }
 .tour a:hover { text-decoration: underline; }
 
+/* ---------- hotels (key-tag cards) ---------- */
+.stays { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; padding-block: 16px 40px; }
+.stay { background: var(--paper); box-shadow: var(--shadow); padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; min-width: 0; position: relative; border-left: 6px solid var(--gold); }
+.stay .when { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: var(--gold); }
+.stay h3 { font-family: var(--f-display); font-weight: 400; font-size: 20px; line-height: 1.2; margin: 0; padding-right: 64px; }
+.stay .area { font-size: 13px; color: var(--muted); margin-top: -2px; }
+.stay .tier { position: absolute; top: 14px; right: 14px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--seal); border: 1px solid currentColor; border-radius: 4px; padding: 1px 6px; }
+.stay .room { font-family: var(--f-hand); font-size: 17px; line-height: 1.25; }
+.stay p { margin: 0; font-size: 14px; color: var(--muted); flex: 1; }
+.stay .foot { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; border-top: 1px dashed var(--line); padding-top: 8px; margin-top: 2px; }
+.stay .price { font-family: var(--f-display); font-size: 18px; font-variant-numeric: tabular-nums; }
+.stay .price small { font-family: var(--f-body); font-size: 12px; color: var(--muted); }
+.stay .book { font-size: 12px; color: var(--muted); }
+.stay a { font-size: 13px; font-weight: 700; color: var(--seal); text-decoration: none; }
+.stay a:hover { text-decoration: underline; }
+
 /* ---------- alternatives page ---------- */
 .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 4px 8px; }
 .filters button {
@@ -297,7 +313,7 @@ const CITIES = [
   {
     id: "shanghai", name: "Shanghai", zh: "上海", dates: "May 17–20", nights: 3, arrive: "Fly into Pudong",
     tag: "Disney, the Bund and a sci-fi skyline",
-    intro: "We land, sleep at the Toy Story Hotel, and hit Shanghai Disneyland at rope drop for TRON. Then over to the Bund for Yu Garden's curved rooftops and the skyline from 550 m up.",
+    intro: "We land, sleep at the Shanghai Disneyland Hotel, and hit Shanghai Disneyland at rope drop for TRON. Then over to the Bund for Yu Garden's curved rooftops and the skyline from 550 m up.",
     builtFor: "Janette: Disney #1. Josh: Communist Party history. Alex: neon Bund, sci-fi skyline, Yu Garden's rooftops.",
     sky: ["#2a2f5c", "#d86a6a"], hill: "#1b1e38", style: "skyline", water: true,
     see: [
@@ -403,7 +419,7 @@ const CITIES = [
   {
     id: "zhangjiajie", name: "Zhangjiajie", zh: "张家界", dates: "May 30–Jun 1", nights: 2, arrive: "~2 hr train from Wulong",
     tag: "The Avatar peaks",
-    intro: "The sandstone pillars behind Avatar's floating mountains and Genshin's Liyue. Tianmen Mountain by cable car, a glass-walled lodge facing the peaks, and the Bailong elevator up the cliff.",
+    intro: "The sandstone pillars behind Avatar's floating mountains and Genshin's Liyue. Tianmen Mountain by cable car, a lodge with an infinity pool facing the peaks, and the Bailong elevator up the cliff.",
     builtFor: "Everyone: the Avatar peaks. Alex: Genshin's Liyue was modeled here.",
     sky: ["#e8eee6", "#8aa9a0"], hill: "#2f4f48", style: "karst",
     see: [
@@ -411,7 +427,7 @@ const CITIES = [
       { zh: "天门山", day: "Sun May 30 · afternoon", title: "Tianmen Mountain", note: "Cable car, escalators through the mountain, cliffside walkway", who: "Janette + Josh", q: "Tianmen Mountain Zhangjiajie", sky: ["#dfe6ec", "#6c8798"], style: "karst" },
       { zh: "百龙", day: "Mon May 31", title: "Bailong glass elevator", note: "Straight up the cliff face", who: "All three", q: "Bailong Elevator Zhangjiajie", sky: ["#e6ecef", "#86a2a8"], style: "karst" },
       { zh: "天子山", day: "Mon May 31", title: "Tianzi Mountain cable car", note: "Riding down through the peaks", who: "All three", q: "Tianzi Mountain cable car Zhangjiajie", sky: ["#f2e3cc", "#7c9a86"], style: "karst" },
-      { zh: "玻璃屋", day: "Sun May 30 · night", title: "Glass-walled lodge", note: "Wake up facing the peaks at Wulingyuan", who: "All three", q: "Zhangjiajie Wulingyuan glass hotel", sky: ["#2a3550", "#c58a6a"], style: "karst" }
+      { zh: "山居", day: "Sun May 30 · night", title: "No. 5 Valley Lodge", note: "Infinity pool facing the peaks at the West Gate", who: "All three", q: "No. 5 Valley Lodge Zhangjiajie", sky: ["#2a3550", "#c58a6a"], style: "karst" }
     ],
     eat: [
       { zh: "三下锅", title: "Sanxiaguo", note: "Tujia-style dry pot" },
@@ -424,8 +440,8 @@ const CITIES = [
   {
     id: "yangshuo", name: "Yangshuo", zh: "阳朔", dates: "Jun 1–3", nights: 2, arrive: "~7.5 hr train",
     tag: "Karst peaks and the 20-yuan view",
-    intro: "A rest day on rails, then a light show staged on the river itself. A private raft past the view printed on the 20-yuan note, a cave with mud pools, and a cave hotel against the cliffs.",
-    builtFor: "Everyone: Li River karsts and the cave hotel. Josh: cool caves.",
+    intro: "A rest day on rails, then a light show staged on the river itself. A private raft past the view printed on the 20-yuan note, a cave with mud pools, and a balcony over the Yulong River.",
+    builtFor: "Everyone: Li River karsts and the river-balcony suite. Josh: cool caves.",
     sky: ["#f5d9c0", "#9cc3c4"], hill: "#3a6b63", style: "karst", water: true,
     see: [
       { zh: "漓江", day: "Wed Jun 2 · early", title: "Li River raft from Xingping", note: "Past the view on the 20-yuan note", who: "All three", q: "Li River raft Xingping 20 yuan view", sky: ["#f3e1c8", "#95bfc0"], style: "karst", water: true },
@@ -506,6 +522,37 @@ const TOURS = {
     { length: "Half day", title: "Hong Kong food tour", note: "Dim sum, roast goose, egg tarts and milk tea in Sham Shui Po or Central.", q: "Hong Kong food tour Sham Shui Po" },
     { length: "Full day", title: "Lantau Island tour", note: "Big Buddha, Po Lin Monastery and the stilt houses of Tai O.", q: "Lantau Island tour Big Buddha Tai O" },
     { length: "Full day", title: "Macau day trip", note: "Over the sea bridge to Portuguese streets and the Ruins of St. Paul's.", q: "Macau day trip from Hong Kong" }
+  ]
+};
+
+/* Hotel picks per stop, from the family itinerary. Prices are approximate Trip.com starting rates per night. */
+const HOTELS = {
+  shanghai: [
+    { when: "May 17–19 · 2 nights", name: "Shanghai Disneyland Hotel", area: "Shanghai Disney Resort", tier: "Splurge, epic", room: "Two rooms: a two-bed room for the boys, one for Janette", price: 700, book: "Shanghai Disney Resort", note: "Art Nouveau-style hotel across Wishing Star Lake. Shuttle to the gate every ~10 min, so Alex can nap midday and come back." },
+    { when: "May 19 · 1 night", name: "Atour Nanjing East Road on the Bund", area: "The Bund", tier: "Splurge", room: "Superior 2-Bed Room for the boys, a queen for Janette", price: 450, book: "Trip.com", note: "Ask for early check-in so Alex can rest while Janette and Josh head out." }
+  ],
+  beijing: [
+    { when: "May 20–23 · 3 nights", name: "Novotel Beijing Peace", area: "Wangfujing", tier: "Mid", room: "Family Room (queen + single) for the boys, Deluxe King for Janette", price: 260, book: "Trip.com or Accor", note: "Booking with Accor can match the price and earn points." }
+  ],
+  xian: [
+    { when: "May 23–25 · 2 nights", name: "Bell Tower Hotel", area: "Bell Tower, city center", tier: "Save", room: "Bell Tower Panoramic Family Room (2 doubles) for the boys, a double for Janette", price: 160, book: "Trip.com", note: "Right in the middle of town for Alex's rest day." }
+  ],
+  chengdu: [
+    { when: "May 25–27 · 2 nights", name: "Chuanxing Yinli Hotel", area: "Kuanzhai Alley", tier: "Mid", room: "A king for Janette, a two-bed room for the boys", price: 270, book: "Trip.com", note: "Trip.com shows only king rooms online. Message the hotel to confirm a two-bed room before booking." }
+  ],
+  chongqing: [
+    { when: "May 27–29 · 2 nights", name: "FORMONT High-Rise River View Hotel", area: "Chongqing, by Hongya Cave", tier: "Save", room: "Smart City View Triple (3 singles), floors 14–16", price: 110, book: "Trip.com", note: "About a 5-minute walk to Hongya Cave. The triple has a city view; the only full river-view room has just two beds." },
+    { when: "May 29 · 1 night", name: "Xianyu·Xu Resort", area: "Wulong, Fairy Mountain Visitor Center", tier: "Save", room: "Panorama Room, Triple (queen + 2 doubles, French windows)", price: 100, book: "Trip.com", note: "Next to the Fairy Mountain ticket center, so the morning shuttle starts at the door. Confirm it accepts foreign guests." }
+  ],
+  zhangjiajie: [
+    { when: "May 30 · 1 night", name: "No. 5 Valley Lodge", area: "Forest Park West Gate", tier: "Splurge, epic", room: "Family Suite (king + 2 futon beds, 100 m²)", price: 280, book: "Trip.com", note: "Infinity pool facing the peaks, 9.7/10. If futons won't work for the boys, add a second king room for about $200 more." },
+    { when: "May 31 · 1 night", name: "Sheba Wangyue Light Luxury Homestay", area: "Near Zhangjiajie West station", tier: "Save", room: "Two Balcony rooms (2 doubles each)", price: 140, book: "Trip.com", note: "Close for the 7:12 am train, and about 400 m from the lantern-lit 72 Strange Buildings. Confirm it accepts foreign guests." }
+  ],
+  yangshuo: [
+    { when: "Jun 1–3 · 2 nights", name: "Yangshuo Mountain Retreat", area: "Yulong River", tier: "Mid, epic", room: "Riverview Family Suite Balcony (queen + full, plus a full in an adjoining room)", price: 160, book: "Its own site", note: "Every family suite has a balcony over the Yulong River with karst peaks behind it." }
+  ],
+  hongkong: [
+    { when: "Jun 3–5 · 2 nights", name: "Park Hotel Hong Kong", area: "Tsim Sha Tsui", tier: "Mid", room: "Deluxe Triple (3 singles, 37 m²)", price: 225, book: "Its own site or Expedia", note: "Walkable to the Star Ferry and the harbor front." }
   ]
 };
 
@@ -721,6 +768,9 @@ function cityPage(c) {
   <section class="days">${days}</section>
   <div class="section-label eyebrow">The board</div>
   <section class="board">${tiles.join("")}</section>
+  <div class="section-label eyebrow">Where we sleep</div>
+  <div class="tours-head"><h2>Hotels in ${esc(shortName(c))}</h2><p>Approximate per-night rates for all three of us; check live prices and pick free cancellation.</p></div>
+  <section class="stays">${(HOTELS[c.id] || []).map(h => `<article class="stay"><span class="tier">${esc(h.tier)}</span><div class="when">${esc(h.when)}</div><h3>${esc(h.name)}</h3><div class="area">${esc(h.area)}</div><div class="room">${esc(h.room)}</div><p>${esc(h.note)}</p><div class="foot"><span class="price">~$${h.price}<small> / night</small></span><span class="book">Book: ${esc(h.book)}</span><a href="${photoUrl(h.name + " " + h.area)}" target="_blank" rel="noopener">Photos ↗</a></div></article>`).join("")}</section>
   <div class="section-label eyebrow">Popular guided tours</div>
   <div class="tours-head"><h2>Tours in ${esc(shortName(c))}</h2><p>Links open a search for current operators and prices. <a href="#alternatives">See alternative activities →</a></p></div>
   <section class="tours">${(TOURS[c.id] || []).map(t => `<article class="tour"><span class="len">${esc(t.length)}</span><h3>${esc(t.title)}</h3><p>${esc(t.note)}</p><a href="https://www.google.com/search?q=${encodeURIComponent(t.q)}" target="_blank" rel="noopener">Find this tour ↗</a></article>`).join("")}</section>
